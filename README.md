@@ -128,6 +128,6 @@ Log.ForContext("Category", category)
 ```
 
 ## Update startup.cs file to exclude health check logs and summarize HTTP requests
-``
+```
 app.UseCustomRequestLogging();
 ```
