@@ -131,3 +131,103 @@ Log.ForContext("Category", category)
 ```
 app.UseCustomRequestLogging();
 ```
+
+## Add Docker compose.yml to the prohect 
+```
+version: '3.4'
+
+services:
+  carvedrock.api:    
+    build:
+      context: .
+      dockerfile: CarvedRock.Api/Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - SimpleProperty="hello-from-code-compose"
+    depends_on: 
+      - seq_in_dc
+
+
+  seq_in_dc:    
+    image: datalust/seq    
+    ports:
+      - '8005:80'      
+    environment:
+      - ACCEPT_EULA=Y 
+```
+
+## Add the UI to the carved rock project
+* Validate the FootwareController
+* Validate the program.cs
+* Validate the startup.cs
+* Validate the integrations - CarvedRockApiClient
+* Validate the appsettings.json to have the compose api service name
+```
+{
+  "CarvedRockApiUrl": "http://carvedrock.api",
+
+  "AllowedHosts": "*"
+}
+```
+
+## Add support for RabbitMQ
+* https://www.rabbitmq.com/getstarted.html
+* https://hub.docker.com/_/rabbitmq
+* Update the API project to communicate with the RabbitMQ
+* Update the docker-compose.yml file:
+```
+  rabbit_in_dc:
+    image: rabbitmq:3-management
+    ports:
+      - 8088:15672
+```
+
+## Add Order CarvedRock.OrderProcessor project to the solution
+* Update the docker compose file:
+```
+carvedrock.orderprocessor:
+    build:
+      context: .
+      dockerfile: CarvedRock.OrderProcessor/Dockerfile    
+    depends_on: 
+      - seq_in_dc
+      - rabbit_in_dc
+      - sql_in_dc
+```
+
+## Add SQL project with Dockerfile and related scripts
+* Update the docker-compose.yml file:
+```
+sql_in_dc:
+    build:
+      context: .
+      dockerfile: sql/sql.Dockerfile
+    restart: always
+    ports:
+      - "1440:1433"   
+    environment:      
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Sqlc0ntainersFTW!  
+```
+
+## Run Compose Up 
+* Brouse the UI App
+* Click on Footwear
+* Place Order
+* Validate Seq logs for order processing
+```
+http://localhost:8005/
+```
+* Validate RabbitMQ
+```
+http://localhost:8088/#/
+username: guest
+password: guest 
+```
+* Validate SQL Database table - CarvedRock.Order table
+```
+username: sa
+Password: Sqlc0ntainersFTW!
+

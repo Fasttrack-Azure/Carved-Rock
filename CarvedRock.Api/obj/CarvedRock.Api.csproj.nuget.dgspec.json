@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Trainings\\VMware\\Carved Rock\\Carved-Rock\\CarvedRock.Api\\CarvedRock.Api.csproj": {}
+    "c:\\Trainings\\VMware\\Carved Rock\\Carved-Rock\\CarvedRock.Api\\CarvedRock.Api.csproj": {}
   },
   "projects": {
-    "C:\\Trainings\\VMware\\Carved Rock\\Carved-Rock\\CarvedRock.Api\\CarvedRock.Api.csproj": {
+    "c:\\Trainings\\VMware\\Carved Rock\\Carved-Rock\\CarvedRock.Api\\CarvedRock.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Trainings\\VMware\\Carved Rock\\Carved-Rock\\CarvedRock.Api\\CarvedRock.Api.csproj",
+        "projectUniqueName": "c:\\Trainings\\VMware\\Carved Rock\\Carved-Rock\\CarvedRock.Api\\CarvedRock.Api.csproj",
         "projectName": "CarvedRock.Api",
-        "projectPath": "C:\\Trainings\\VMware\\Carved Rock\\Carved-Rock\\CarvedRock.Api\\CarvedRock.Api.csproj",
+        "projectPath": "c:\\Trainings\\VMware\\Carved Rock\\Carved-Rock\\CarvedRock.Api\\CarvedRock.Api.csproj",
         "packagesPath": "C:\\Users\\adminuser\\.nuget\\packages\\",
-        "outputPath": "C:\\Trainings\\VMware\\Carved Rock\\Carved-Rock\\CarvedRock.Api\\obj\\",
+        "outputPath": "c:\\Trainings\\VMware\\Carved Rock\\Carved-Rock\\CarvedRock.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\adminuser\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,25 +40,37 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.90, )"
+            },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
               "version": "[1.10.14, )"
             },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.2.1, )"
+            },
             "Serilog.AspNetCore": {
               "target": "Package",
-              "version": "[5.0.0, )"
+              "version": "[4.1.0, )"
             },
             "Serilog.Enrichers.Environment": {
               "target": "Package",
-              "version": "[2.2.0, )"
+              "version": "[2.1.3, )"
             },
             "Serilog.Sinks.Seq": {
               "target": "Package",
-              "version": "[5.1.1, )"
+              "version": "[5.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[5.6.3, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.2, )"
             }
           },
           "imports": [

@@ -13,11 +13,14 @@ namespace CarvedRock.Api
             var name = typeof(Program).Assembly.GetName().Name;
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithProperty("Assembly", name)
-                .WriteTo.Seq(serverUrl: "http://host.docker.internal:5341")
+                // available sinks: https://github.com/serilog/serilog/wiki/Provided-Sinks
+                // Seq: https://datalust.co/seq
+                // Seq with Docker: https://docs.datalust.co/docs/getting-started-with-docker
+                .WriteTo.Seq(serverUrl: "http://seq_in_dc:5341")
                 .WriteTo.Console()
                 .CreateLogger();
 
@@ -37,9 +40,9 @@ namespace CarvedRock.Api
                 Log.CloseAndFlush();
             }
         }
-
+        
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-		    // http://bit.ly/aspnet-builder-defaults
+            // http://bit.ly/aspnet-builder-defaults
             Host.CreateDefaultBuilder(args)
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>

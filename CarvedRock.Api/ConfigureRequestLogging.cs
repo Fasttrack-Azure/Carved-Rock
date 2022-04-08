@@ -13,7 +13,7 @@ namespace CarvedRock.Api
         {
             return app.UseSerilogRequestLogging(options =>
             {
-                // health check exclusion inspiration: (save logging space, reduce log noise, easier review for eg.)
+                // health check exclusion inspiration: 
                 // https://andrewlock.net/using-serilog-aspnetcore-in-asp-net-core-3-excluding-health-check-endpoints-from-serilog-request-logging/
                 options.GetLevel = ExcludeHealthChecks;
                 options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
