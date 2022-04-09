@@ -18,7 +18,15 @@ private readonly ILogger _logger;
             _productLogic = productLogic;
             _logger = logger;
         }
+
+
+        public IEnumerable<Product> GetProducts(string category = "all")
+        {
+            _logger.LogInformation("Starting controller action GetProducts for {category}", category);
+            return _productLogic.GetProductsForCategory(category);
+        }
 ```
+
 
 ## DO the same for QuickOrderController
 
@@ -31,12 +39,15 @@ private readonly ILogger _logger;
 services.AddScoped<IProductLogic, ProductLogic>();
 services.AddScoped<IQuickOrderLogic, QuickOrderLogic>();
 ```
+* Add debug at GetProducts method and test VS Code debugging
+* Verify if the logs are visible in the debug console
 
-## Notice there is no try catch block in the controller logic
+## Exception Handeling - Notice there is no try catch block in the controller logic
 * Navigate to the startup.cs file to validate the call to middleware for exception handling 
 * Validate the ProductLogic.cs code for the validation logic that throws Application exception or a technical exception
 
 ## Add support for Serilog
+* https://github.com/serilog/serilog-aspnetcore 
 ```
 cd .\CarvedRock.Api\
 dotnet add package Serilog.AspNetCore --version 5.0.0
@@ -83,7 +94,7 @@ public static int Main(string[] args)
                 });
 ```
 
-* Remove Logging information from appsettings
+* Remove Logging information from appsettings 
 ```
 {
   "Logging": {
@@ -116,6 +127,8 @@ public static int Main(string[] args)
 Log.Information("Starting controller action GetProducts for {category}");
 ```
 
+* Debug using VS Code to verify logs using Serilogs
+
 ## Add support for Seq
 ```
 dotnet add package Serilog.Sinks.Seq
@@ -127,12 +140,19 @@ Log.ForContext("Category", category)
     .Information("Starting controller action GetProducts");
 ```
 
-## Update startup.cs file to exclude health check logs and summarize HTTP requests
+## Spin up Seq container
+```
+docker pull datalust/seq
+docker run --name seq -d --restart unless-stopped -e ACCEPT_EULA=Y -p 5341:80 datalust/seq:latest
+```
+## Update startup.cs file to exclude health check logs and summarize HTTP requests and add diagnostic context to the log entries
 ```
 app.UseCustomRequestLogging();
 ```
+* Navigate to the above method to exclude health checks
+* Update Program.sc to use Seq service name
 
-## Add Docker compose.yml to the prohect 
+## Add Docker compose.yml to the project
 ```
 version: '3.4'
 
@@ -171,6 +191,19 @@ services:
   "AllowedHosts": "*"
 }
 ```
+
+## Update the docker-compose.yml
+```
+  carvedrock.app:
+    build:
+      context: .
+      dockerfile: CarvedRock.App/Dockerfile
+    ports:
+      - "8081:80"
+    depends_on: 
+      - seq_in_dc
+```
+## Run compose up and test the API app with UI application and Seq
 
 ## Add support for RabbitMQ
 * https://www.rabbitmq.com/getstarted.html
